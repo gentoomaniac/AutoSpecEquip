@@ -13,21 +13,24 @@ StaticPopupDialogs["AUTOSPECEQUIP_CONFIRM"] = {
 
 local function EventHandler(event, ...)
     if event == "PLAYER_SPECIALIZATION_CHANGED" then
-        local currentSpec = GetSpecialization()
-        local currentSpecName = currentSpec and select(2, GetSpecializationInfo(currentSpec)) or nil
-        if currentSpecName then
-            icon, setID, isEquipped, numItems, numEquipped, unknown, numMissing, numIgnored = GetEquipmentSetInfoByName(currentSpecName)
-            if setID and not isEquipped then
-                StaticPopupDialogs["AUTOSPECEQUIP_CONFIRM"].text = "Do you want to equip this set?\n".."|T"..icon..":0|t "..currentSpecName
-                StaticPopupDialogs["AUTOSPECEQUIP_CONFIRM"].OnAccept = function()
-                    equipped = UseEquipmentSet(currentSpecName)
-                    if equipped then
-                        AutoSpecEquip:Print("Equipped set " .. "|T" .. icon .. ":0|t " .. currentSpecName)
-                    else
-                        AutoSpecEquip:Print("Equipping set " .. "|T" .. icon .. ":0|t " .. currentSpecName .. " failed!")
+        local who = ...
+        if who == "player" then
+            local currentSpec = GetSpecialization()
+            local currentSpecName = currentSpec and select(2, GetSpecializationInfo(currentSpec)) or nil
+            if currentSpecName then
+                icon, setID, isEquipped, numItems, numEquipped, unknown, numMissing, numIgnored = GetEquipmentSetInfoByName(currentSpecName)
+                if setID and not isEquipped then
+                    StaticPopupDialogs["AUTOSPECEQUIP_CONFIRM"].text = "Do you want to equip this set?\n".."|T"..icon..":0|t "..currentSpecName
+                    StaticPopupDialogs["AUTOSPECEQUIP_CONFIRM"].OnAccept = function()
+                        equipped = UseEquipmentSet(currentSpecName)
+                        if equipped then
+                            AutoSpecEquip:Print("Equipped set " .. "|T" .. icon .. ":0|t " .. currentSpecName)
+                        else
+                            AutoSpecEquip:Print("Equipping set " .. "|T" .. icon .. ":0|t " .. currentSpecName .. " failed!")
+                        end
                     end
+                    StaticPopup_Show ("AUTOSPECEQUIP_CONFIRM")
                 end
-                StaticPopup_Show ("AUTOSPECEQUIP_CONFIRM")
             end
         end
     end
