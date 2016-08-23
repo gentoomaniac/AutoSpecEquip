@@ -18,15 +18,20 @@ local function EventHandler(event, ...)
             local currentSpec = GetSpecialization()
             local currentSpecName = currentSpec and select(2, GetSpecializationInfo(currentSpec)) or nil
             if currentSpecName then
-                icon, setID, isEquipped, numItems, numEquipped, unknown, numMissing, numIgnored = GetEquipmentSetInfoByName(currentSpecName)
+                if string.len(currentSpecName) > 16 then
+                    currentSpecSetName = string.sub(currentSpecName, 0, 16)
+                else
+                    currentSpecSetName = currentSpecName
+                end
+                icon, setID, isEquipped, numItems, numEquipped, unknown, numMissing, numIgnored = GetEquipmentSetInfoByName(currentSpecSetName)
                 if setID and not isEquipped then
-                    StaticPopupDialogs["AUTOSPECEQUIP_CONFIRM"].text = "Do you want to equip this set?\n".."|T"..icon..":0|t "..currentSpecName
+                    StaticPopupDialogs["AUTOSPECEQUIP_CONFIRM"].text = "Do you want to equip this set?\n".."|T"..icon..":0|t "..currentSpecSetName
                     StaticPopupDialogs["AUTOSPECEQUIP_CONFIRM"].OnAccept = function()
-                        equipped = UseEquipmentSet(currentSpecName)
+                        equipped = UseEquipmentSet(currentSpecSetName)
                         if equipped then
-                            AutoSpecEquip:Print("Equipped set " .. "|T" .. icon .. ":0|t " .. currentSpecName)
+                            AutoSpecEquip:Print("Equipped set " .. "|T" .. icon .. ":0|t " .. currentSpecSetName)
                         else
-                            AutoSpecEquip:Print("Equipping set " .. "|T" .. icon .. ":0|t " .. currentSpecName .. " failed!")
+                            AutoSpecEquip:Print("Equipping set " .. "|T" .. icon .. ":0|t " .. currentSpecSetName .. " failed!")
                         end
                     end
                     StaticPopup_Show ("AUTOSPECEQUIP_CONFIRM")
