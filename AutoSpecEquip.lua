@@ -18,8 +18,8 @@ local function EventHandler(event, ...)
             local currentSpec = GetSpecialization()
             local currentSpecName = currentSpec and select(2, GetSpecializationInfo(currentSpec)) or nil
             if currentSpecName then
-                if string.len(currentSpecName) > 16 then
-                    currentSpecSetName = string.sub(currentSpecName, 0, 16)
+                if strlenutf8(currentSpecName) > 16 then
+                    currentSpecSetName = string.utf8sub(currentSpecName, 0, 16)
                 else
                     currentSpecSetName = currentSpecName
                 end

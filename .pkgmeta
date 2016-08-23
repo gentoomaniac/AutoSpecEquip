@@ -19,3 +19,6 @@ externals:
     libs/AceEvent-3.0:
         url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceEvent-3.0
         tag: latest
+    libs/UTF8:
+        url: svn://svn.wowace.com/wow/utf8/mainline/trunk
+        tag: latest
