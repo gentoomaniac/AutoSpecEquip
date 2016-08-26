@@ -2,11 +2,13 @@
 ## Title: AutoSpecEquip
 ## Notes: Changes equipment set when you change spec to a set with the same name as your spec
 ## Author: gentoomaniac
-## Version: 7.0.3-1.0.0
-## SavedVariables:
+## Version: 7.0.3-1.1.0
+## SavedVariables: AutoSpecEquip_DB
 
+embeds.xml
 libs\UTF8\utf8data.lua
 libs\UTF8\utf8.lua
 
-embeds.xml
+locales\locales.xml
+
 AutoSpecEquip.lua
