@@ -16,5 +16,7 @@ if L then
     end
     
     L["OPTION_CONFIRMATION"] = "Bestätigungsdialog anzeigen"
-    L["OPTION_CONFIRMATION_DESC"] = "Wenn aktiviert wird ein Dialog zur Bestätigung angeyeigt bevor ein Set angelegt wird"
+    L["OPTION_CONFIRMATION_DESC"] = "Aktiviert/Deaktiviert den Dialog zur Bestätigung bevor ein Set angelegt wird"
+    L["OPTION_SPEC_ENABLED"] = "aktiviert"
+    L["OPTION_SPEC_ENABLED_DESC"] =  "Aktiviert/Deaktiviert das Anlegen des ausgewählten Sets für diese Spezialisierung"
 end

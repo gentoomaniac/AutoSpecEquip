@@ -17,4 +17,6 @@ if L then
     
     L["OPTION_CONFIRMATION"] = "Show confirmation dialog"
     L["OPTION_CONFIRMATION_DESC"] = "If checked you will be asked for confirmation before a set is equipped"
+    L["OPTION_SPEC_ENABLED"] = "enabled"
+    L["OPTION_SPEC_ENABLED_DESC"] =  "If checked, the selected set will be equipped when you change to this spec"
 end
