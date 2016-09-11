@@ -3,6 +3,8 @@ AutoSpecEquip = LibStub("AceAddon-3.0"):NewAddon("AutoSpecEquip", "AceConsole-3.
 local AceConfig = LibStub("AceConfig-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("AutoSpecEquip", false)
 
+local oldSpecName = ""
+
 local defaults = {
     char = {
         confirmation_enabled = true,
@@ -39,6 +41,12 @@ local function EventHandler(event, ...)
         if who == "player" then
             local specIndex = GetSpecialization()
             local currentSpecName = specIndex and select(2, GetSpecializationInfo(specIndex)) or nil
+            -- work around to ignore events from switching talents
+            if oldSpecName == currentSpecName then
+                return
+            else
+                oldSpecName = currentSpecName
+            end
             if AutoSpecEquip.db.char["spec_"..specIndex].enabled then
                 if AutoSpecEquip.db.char["spec_"..specIndex].equipmentSetName ~= "" then
                     currentSpecSetName = AutoSpecEquip.db.char["spec_"..specIndex].equipmentSetName
@@ -128,4 +136,7 @@ function AutoSpecEquip:OnInitialize()
     AutoSpecEquip.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("AutoSpecEquip", "AutoSpecEquip")
     
     AutoSpecEquip:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", EventHandler)
+    
+    local specIndex = GetSpecialization()
+    oldSpecName = specIndex and select(2, GetSpecializationInfo(specIndex)) or nil
 end
