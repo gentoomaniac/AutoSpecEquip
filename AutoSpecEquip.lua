@@ -26,10 +26,11 @@ StaticPopupDialogs["AUTOSPECEQUIP_CONFIRM"] = {
     preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
 }
 
-local function ChangeSpec(icon, currentSpecSetName)
-    equipped = UseEquipmentSet(currentSpecSetName)
+local function ChangeSpec(icon, setID, currentSpecSetName)
+    equipped = C_EquipmentSet.UseEquipmentSet(setID)
     if equipped then
         AutoSpecEquip:Print(L["EQUIP_SET_SUCCESS"](icon, currentSpecSetName))
+    -- This is most likely broken due to the artifact weapon being auto equipped on spec change
     else
         AutoSpecEquip:Print(L["EQUIP_SET_FAILED"](icon, currentSpecSetName))
     end
@@ -58,16 +59,17 @@ local function EventHandler(event, ...)
                     end
                 end
                 if currentSpecSetName and currentSpecSetName ~= "" then
-                    icon, setID, isEquipped, numItems, numEquipped, unknown, numMissing, numIgnored = GetEquipmentSetInfoByName(currentSpecSetName)
-                    if setID and not isEquipped then
+                    local sID = C_EquipmentSet.GetEquipmentSetID(currentSpecSetName)
+                    name, iconFileID, setID, isEquipped, numItems, numEquipped, numInInventory, numLost, numIgnored = C_EquipmentSet.GetEquipmentSetInfo(sID)
+                    if sID and not isEquipped then
                         if AutoSpecEquip.db.char.confirmation_enabled then
-                            StaticPopupDialogs["AUTOSPECEQUIP_CONFIRM"].text = L["CONFIRMATION_MESSAGE"](icon, currentSpecSetName)
+                            StaticPopupDialogs["AUTOSPECEQUIP_CONFIRM"].text = L["CONFIRMATION_MESSAGE"](iconFileID, currentSpecSetName)
                             StaticPopupDialogs["AUTOSPECEQUIP_CONFIRM"].OnAccept = function()
-                                ChangeSpec(icon, currentSpecSetName)
+                                ChangeSpec(iconFileID, sID, currentSpecSetName)
                             end
                             StaticPopup_Show ("AUTOSPECEQUIP_CONFIRM")
                         else
-                            ChangeSpec(icon, currentSpecSetName)
+                            ChangeSpec(iconFileID, sID, currentSpecSetName)
                         end
                     end
                 end
@@ -78,8 +80,9 @@ end
 
 local function GetEquipmentSetList()
     local l = {}
-    for setNum=1,GetNumEquipmentSets(),1 do
-        local name, icon, lessIndex = GetEquipmentSetInfo(setNum)
+    local equipmentSetIDs = C_EquipmentSet.GetEquipmentSetIDs()
+    for setNum=1, #equipmentSetIDs do
+        local name, icon, lessIndex = C_EquipmentSet.GetEquipmentSetInfo(equipmentSetIDs[setNum])
         l[name] = icon and "|T"..icon..":0|t "..name or name
     end
     return l
